@@ -38,13 +38,13 @@ resource "azurerm_service_plan" "servicePlan" {
   name                = "webapp-sp"
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
-  os_type             = "Linux"
   sku_name            = "P1v2"
+  os_type             = "Windows"
 }
 
 # Provision a web app
 resource "azurerm_linux_web_app" "rg" {
-  name                = "hello-demo-webapp"
+  name                = "node-demo-webapp"
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_service_plan.servicePlan.location
   service_plan_id     = azurerm_service_plan.servicePlan.id
