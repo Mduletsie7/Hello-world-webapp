@@ -1,0 +1,40 @@
+name: Reusable Build workflow
+
+on:
+    workflow_call:
+
+env:
+    AZURE_WEBAPP_NAME: node-demo-webapp    # set this to your application's name
+    AZURE_WEBAPP_PACKAGE_PATH: '.'      # set this to the path to your web app project, defaults to the repository root
+    NODE_VERSION: '14.x'                # set this to the node version to use
+
+jobs:
+        build:
+          runs-on: ubuntu-latest
+          steps:
+            # Checkout the repo
+          - uses: actions/checkout@v3
+      
+          - uses: azure/login@v1
+            with:
+              creds: ${{ secrets.DEMO_WEBAPP_SP }}
+          
+          - name: Setup Node.js
+            uses: actions/setup-node@v4
+            with:
+              node-version: ${{ env.NODE_VERSION }}
+              cache: 'npm'
+      
+          - name: 'npm install, build, and test'
+            run: |
+              npm install
+              npm run build --if-present
+              npm run test --if-present
+            working-directory:  ${{env.AZURE_WEBAPP_PACKAGE_PATH}}
+      
+          - name: Upload artifact for deployment job
+            uses: actions/upload-artifact@v4
+            with:
+              name: node-app
+              path: .
+
