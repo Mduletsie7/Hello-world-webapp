@@ -6,7 +6,7 @@ AZURE_WEBAPP_PACKAGE_PATH="./php"      # set this to the path to your web app pr
 PHP_VERSION="8.x"                  # set this to the PHP version to use
 
 # Set permissions
-chmod -R 400 $GITHUB_WORKSPACE/*
+sudo chmod -R 400 $GITHUB_WORKSPACE/*
 
 # Define the deploy function
 deploy() {
