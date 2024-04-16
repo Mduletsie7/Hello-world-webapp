@@ -19,11 +19,12 @@ jobs:
 
 #Trigger build pipeline by calling the reusable workflow file
   build:
-    name: "Call build.yml workflow file"
+    name: "Build"
     uses: ./.github/workflows/build.yml
 
 #Trigger deploy pipeline by calling the reusable workflow file
   deploy:
-    name: "Call deploy.yml workflow file"
+    name: "Deploy"
     needs: build
     uses: ./.github/workflows/deploy.yml
+    secrets: inherit
