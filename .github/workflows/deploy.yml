@@ -26,9 +26,9 @@ jobs:
         with:
           name: php-app
 
-      - uses: azure/login@v1
+      - uses: azure/login@v2
         with:
-          creds: ${{ secrets.DEMO_WEBAPP_SP }}
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
