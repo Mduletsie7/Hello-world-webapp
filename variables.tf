@@ -1,5 +1,5 @@
 variable "resource_group_name" {
-  default = "sprint4DemoRG"
+  default = "php-demorg"
 }
 
 variable "location" {

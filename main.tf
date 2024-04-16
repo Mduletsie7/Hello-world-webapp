@@ -35,16 +35,16 @@ resource "azurerm_resource_group" "rg" {
 
 # Provision a app service plan
 resource "azurerm_service_plan" "servicePlan" {
-  name                = "webapp-sp"
+  name                = "php-webapp-sp"
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
   sku_name            = "P1v2"
-  os_type             = "Windows"
+  os_type             = "Linux"
 }
 
 # Provision a web app
 resource "azurerm_linux_web_app" "rg" {
-  name                = "node-demo-webapp"
+  name                = "php-demo-webapp"
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_service_plan.servicePlan.location
   service_plan_id     = azurerm_service_plan.servicePlan.id
