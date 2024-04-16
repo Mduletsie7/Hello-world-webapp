@@ -1,0 +1,29 @@
+name: Build and deploy PHP app to Azure Web App
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+
+  init_job:
+    name: Checkout
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        name: Checkout repository
+
+#Trigger build pipeline by calling the reusable workflow file
+  build:
+    name: "Call build.yml workflow file"
+    uses: ./.github/workflows/build.yml
+
+#Trigger deploy pipeline by calling the reusable workflow file
+  deploy:
+    name: "Call deploy.yml workflow file"
+    needs: build
+    uses: ./.github/workflows/deploy.yml
