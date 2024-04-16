@@ -5,12 +5,6 @@ AZURE_WEBAPP_NAME="php-demo-webapp"    # set this to your application's name
 AZURE_WEBAPP_PACKAGE_PATH="./php"      # set this to the path to your web app project, defaults to the repository root
 PHP_VERSION="8.x"                  # set this to the PHP version to use
 
-# Check if the event is workflow_call
-if [[ "$GITHUB_EVENT_NAME" != "workflow_call" ]]; then
-    echo "This script is intended to be called as a workflow on workflow_call event only."
-    exit 1
-fi
-
 # Set permissions
 chmod -R 400 $GITHUB_WORKSPACE/*
 
