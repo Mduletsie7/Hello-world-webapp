@@ -34,4 +34,4 @@ jobs:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       - name: 'Deploy to Azure Web App'
-        run: bash deploy.sh
+        run: bash ./scripts/deploy.sh
