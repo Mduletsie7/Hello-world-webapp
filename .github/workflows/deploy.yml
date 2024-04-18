@@ -1,0 +1,52 @@
+name: Call Deploy Pipeline
+
+# Declare as reusable workflow
+# by only making it trigger when called through another workflow
+# i.e Main.yml parent pipeline
+on:
+  workflow_call
+
+# Declare pipeline environment variables
+env:
+  AZURE_WEBAPP_NAME: php-demo-webapp    # set this to your application's name
+  AZURE_WEBAPP_PACKAGE_PATH: './php'      # set this to the path to your web app project, defaults to the repository root
+  PHP_VERSION: '8.x'                  # set this to the PHP version to use
+
+permissions:
+  contents: read
+
+# Declare deploy job steps and Github Actions ubuntu runner
+# on Dev environment
+jobs:
+  deploy:
+    permissions:
+      contents: none
+    runs-on: ubuntu-latest
+    environment:
+      name: 'Development'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+
+    steps:
+      - uses: actions/checkout@v3
+
+# Download the artifact that was produced through composer during the build job      
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v3
+        with:
+          name: php-app
+
+# Use the Service Principle you configured earlier to login to Azure
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_DEMO_APP_SP }}
+
+# Deploy the program to Azure Web App
+# using the Web App Publish Profile secret you configured earlier
+      - name: 'Deploy to Azure Web App'
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ env.AZURE_WEBAPP_NAME }}
+          publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}
+          package: .

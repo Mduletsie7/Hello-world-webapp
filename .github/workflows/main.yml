@@ -1,0 +1,34 @@
+# This is the main pipeline file which is triggered on any pushes to main branch
+# Main.yml parent pipeline which calls build & deploy jobs from reusable workflows
+
+name: Build and deploy PHP app to Azure Web App
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# Define jobs and Github Ubunut Runner
+jobs:
+  init_job:
+    name: Checkout
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        name: Checkout repository
+
+# Trigger build pipeline by calling the reusable workflow file
+  build:
+    name: "Build"
+    uses: ./.github/workflows/build.yml
+
+# Trigger deploy pipeline by calling the reusable workflow file
+# Declare secrets inherit to allow Deploy.yml to use repository secrets
+  deploy:
+    name: "Deploy"
+    needs: build
+    uses: ./.github/workflows/deploy.yml
+    secrets: inherit
